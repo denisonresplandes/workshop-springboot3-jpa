@@ -21,7 +21,7 @@ public class UserService {
 	}
 	
 	public User findById(Integer id) {
-		Objects.requireNonNull(id, "id can't be null");
+		Objects.requireNonNull(id, "user id can't be null");
 		User user = repository.findById(id)
 			.orElseThrow(() -> new RuntimeException("user not found"));
 		return user;

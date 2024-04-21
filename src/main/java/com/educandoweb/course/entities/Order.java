@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.educandoweb.course.entities.enums.OrderStatus;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,18 +27,20 @@ public final class Order implements Serializable {
 	private Integer id;
 	private Instant moment;
 	
+	@Enumerated(EnumType.STRING)
+	private OrderStatus orderStatus;
+	
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 	
 	protected Order() { }
 
-	public Order(Instant moment, User client) {
-		Objects.requireNonNull(moment);
-		Objects.requireNonNull(client);
-		
+	public Order(Instant moment, OrderStatus orderStatus, User client) {
+		validateAttribs(moment, orderStatus, client);
 		this.moment = moment;
 		this.client = client;
+		this.orderStatus = orderStatus;
 	}
 	
 	public Integer getId() {
@@ -45,8 +51,24 @@ public final class Order implements Serializable {
 		return moment;
 	}
 	
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+	
+	public void setOrderStatus(OrderStatus orderStatus) {
+		Objects.requireNonNull(orderStatus);
+		this.orderStatus = orderStatus;
+	}
+	
 	public User getClient() {
 		return client;
+	}
+	
+	private void validateAttribs(Instant moment, OrderStatus orderStatus, 
+			User client) {
+		Objects.requireNonNull(moment);
+		Objects.requireNonNull(client);
+		Objects.requireNonNull(orderStatus);
 	}
 
 	@Override

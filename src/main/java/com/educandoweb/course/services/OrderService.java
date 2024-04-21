@@ -21,7 +21,7 @@ public class OrderService {
 	}
 	
 	public Order findById(Integer id) {
-		Objects.requireNonNull(id, "id can't be null");
+		Objects.requireNonNull(id, "order id can't be null");
 		Order order = repository.findById(id)
 			.orElseThrow(() -> new RuntimeException("order not found"));
 		return order;
