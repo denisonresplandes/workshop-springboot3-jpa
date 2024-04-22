@@ -37,6 +37,7 @@ public final class Order implements Serializable {
 	protected Order() { }
 
 	public Order(Instant moment, OrderStatus orderStatus, User client) {
+		// TODO bean validation
 		validateAttribs(moment, orderStatus, client);
 		this.moment = moment;
 		this.client = client;

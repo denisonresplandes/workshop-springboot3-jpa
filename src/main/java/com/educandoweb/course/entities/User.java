@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable {
+public final class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -42,11 +42,20 @@ public class User implements Serializable {
 	protected User() { }
 	
 	public User(String name, String email, String phone, String password) {
+		// TODO bean validation
 		validateAttribs(name, email, phone, password);
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;		
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getEmail() {
@@ -67,21 +76,9 @@ public class User implements Serializable {
 		this.phone = phone;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
 	public void setPassword(String password) {
 		Objects.requireNonNull(password);
 		this.password = password;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
 	}
 	
 	public List<Order> getOrders() {
