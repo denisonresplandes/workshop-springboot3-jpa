@@ -12,8 +12,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "product")
@@ -31,7 +33,10 @@ public final class Product implements Serializable {
 	private BigDecimal price;
 	private String imgUrl;
 	
-	@Transient
+	@ManyToMany
+	@JoinTable(name = "product_category",
+		joinColumns = @JoinColumn(name = "product_id"),
+		inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories;
 	
 	{
@@ -83,6 +88,11 @@ public final class Product implements Serializable {
 	
 	public Set<Category> getCategories() {
 		return Collections.unmodifiableSet(categories);
+	}
+	
+	public void addCategory(Category category) {
+		Objects.requireNonNull(category, "category can't be null");
+		categories.add(category);
 	}
 	
 	private void validateAttribs(String name, String description, BigDecimal price) {
