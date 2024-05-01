@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,7 +51,7 @@ public final class Product implements Serializable {
 	public Product(String name, String description, BigDecimal price, 
 			String imgUrl) {
 		// TODO bean validation
-		validateAttribs(name, description, price);
+		validateAttribs(name, description, price, imgUrl);
 		this.name = name;
 		this.description = description;
 		setPrice(price);
@@ -83,7 +86,7 @@ public final class Product implements Serializable {
 	}
 	
 	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
+		this.imgUrl = Objects.nonNull(imgUrl) ? imgUrl : "";
 	}
 	
 	public Set<Category> getCategories() {
@@ -95,10 +98,28 @@ public final class Product implements Serializable {
 		categories.add(category);
 	}
 	
-	private void validateAttribs(String name, String description, BigDecimal price) {
+	public void removeCategory(Category category) {
+		Objects.requireNonNull(category, "category can't be null");
+		categories.remove(category);
+	}
+	
+	public static Product createDeepCopy(Product product) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.readValue(mapper.writeValueAsString(product), 
+					Product.class);
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+	
+	private void validateAttribs(String name, String description, BigDecimal price, 
+			String imgUrl) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(description);
 		Objects.requireNonNull(price);
+		Objects.requireNonNull(imgUrl);
 	}
 
 	@Override

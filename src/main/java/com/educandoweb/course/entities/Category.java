@@ -1,10 +1,10 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -49,14 +49,11 @@ public class Category implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
-		Objects.requireNonNull(name);
-		this.name = name;
-	}
-	
+		
 	public Set<Product> getProducts() {
-		return Collections.unmodifiableSet(products);
+		Set<Product> set = products.parallelStream()
+			.map(Product::createDeepCopy).collect(Collectors.toSet());
+		return set;
 	}
 	
 	@Override
