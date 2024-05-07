@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Embeddable
-public class OrderItemPK {
+public final class OrderItemPK {
 	
 	@ManyToOne
 	@JoinColumn(name = "order_id")
@@ -19,6 +19,8 @@ public class OrderItemPK {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+	
+	protected OrderItemPK() { }
 	
 	public OrderItemPK(Order order, Product product) {
 		Objects.requireNonNull(order);

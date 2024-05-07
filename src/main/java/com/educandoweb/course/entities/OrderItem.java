@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.educandoweb.course.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -13,7 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "order_item")
-public class OrderItem implements Serializable {
+public final class OrderItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,12 +35,21 @@ public class OrderItem implements Serializable {
 		id = new OrderItemPK(order, product);
 	}
 	
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
 	
 	public Product getProduct() {
 		return id.getProduct();
+	}
+	
+	public Integer getQuantity() {
+		return quantity;
+	}
+	
+	public BigDecimal getPrice() {
+		return price;
 	}
 
 	public BigDecimal subTotal() {

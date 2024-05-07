@@ -11,6 +11,6 @@ import com.educandoweb.course.entities.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-	@Query("from Order o join fetch o.client")
+	@Query("from Order o join fetch o.client join fetch o.items oi")
 	List<Order> findAll();
 }
