@@ -2,11 +2,12 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -42,7 +44,11 @@ public final class Product implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories;
 	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items;
+	
 	{
+		items = new HashSet<>();
 		categories = new HashSet<>();
 	}
 	
@@ -90,7 +96,7 @@ public final class Product implements Serializable {
 	}
 	
 	public Set<Category> getCategories() {
-		return Collections.unmodifiableSet(categories);
+		return Set.copyOf(categories);
 	}
 	
 	public void addCategory(Category category) {
@@ -101,6 +107,14 @@ public final class Product implements Serializable {
 	public void removeCategory(Category category) {
 		Objects.requireNonNull(category, "category can't be null");
 		categories.remove(category);
+	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders() {
+		Set<Order> orders = items.stream()
+			.map(OrderItem::getOrder)
+			.collect(Collectors.toSet());
+		return orders;
 	}
 	
 	public static Product createDeepCopy(Product product) {

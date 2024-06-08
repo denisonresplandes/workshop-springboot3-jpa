@@ -76,7 +76,7 @@ public final class Order implements Serializable {
 	}
 	
 	public Set<OrderItem> getItems() {
-		return items;
+		return Set.copyOf(items);
 	}
 	
 	private void validateAttribs(Instant moment, OrderStatus orderStatus, 
