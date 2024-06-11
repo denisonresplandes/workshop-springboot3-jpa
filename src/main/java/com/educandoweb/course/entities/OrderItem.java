@@ -52,7 +52,7 @@ public final class OrderItem implements Serializable {
 		return price;
 	}
 
-	public BigDecimal subTotal() {
+	public BigDecimal getSubTotal() {
 		return BigDecimal.valueOf(price.doubleValue() * quantity);
 	}
 

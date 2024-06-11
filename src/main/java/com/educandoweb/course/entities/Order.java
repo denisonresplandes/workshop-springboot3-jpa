@@ -1,6 +1,7 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
@@ -91,6 +92,13 @@ public final class Order implements Serializable {
 	public void setPayment(Payment payment) {
 		Objects.requireNonNull(payment);
 		this.payment = payment;
+	}
+	
+	public BigDecimal getTotal() {
+		BigDecimal total = items.stream()
+			.map(OrderItem::getSubTotal)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+		return total;
 	}
 	
 	private void validateAttribs(Instant moment, OrderStatus orderStatus, 

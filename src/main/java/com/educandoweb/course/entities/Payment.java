@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,8 +32,10 @@ public final class Payment implements Serializable {
 	protected Payment() { }
 	
 	public Payment(Instant moment, Order order) {
-		this.moment = moment;
+		Objects.requireNonNull(order);
+		Objects.requireNonNull(moment);
 		this.order = order;
+		this.moment = moment;
 	}
 	
 	public Integer getId() {
@@ -42,6 +46,7 @@ public final class Payment implements Serializable {
 		return moment;
 	}
 	
+	@JsonIgnore
 	public Order getOrder() {
 		return order;
 	}
