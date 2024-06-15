@@ -15,7 +15,7 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
-	public User save(User user) {
+	public User insert(User user) {
 		Objects.requireNonNull(user, "user can't be null");
 		return repository.save(user);
 	}

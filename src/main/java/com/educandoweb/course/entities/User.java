@@ -28,7 +28,7 @@ public final class User implements Serializable {
 	private String email;
 	private String phone;
 	
-	@JsonIgnore
+	@SuppressWarnings("unused")
 	private String password;
 	
 	@JsonIgnore
@@ -75,9 +75,12 @@ public final class User implements Serializable {
 		Objects.requireNonNull(phone);
 		this.phone = phone;
 	}
-
+	
 	public void setPassword(String password) {
 		Objects.requireNonNull(password);
+		if (password.isEmpty()) {
+			throw new IllegalArgumentException("password can't be empty");
+		}
 		this.password = password;
 	}
 	
