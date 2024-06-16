@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
+import com.educandoweb.course.services.exception.NotFoundException;
 
 @Service
 public class ProductService {
@@ -15,18 +16,37 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
-	public Product save(Product product) {
-		Objects.requireNonNull(product, "product can't be null");
+	/**
+	 * Saves the given {@link Product}.
+	 * 
+	 * @param product
+	 * @return the saved product
+	 * */
+	public Product insert(Product product) {
 		return repository.save(product);
 	}
 	
+	/**
+	 * Retrieves an {@link Product} by its id.
+	 * 
+	 * @param id
+	 * @return the product with the given id
+	 * @throws NotFoundException if the {@link Product} not found
+	 * */
 	public Product findById(Integer id) {
-		Objects.requireNonNull(id, "product id can't be null");
+		if (Objects.isNull(id)) {
+			throw new IllegalArgumentException("the given id must not be null");
+		}
 		Product product = repository.findById(id)
-			.orElseThrow(() -> new RuntimeException("product not found"));
+			.orElseThrow(() -> new NotFoundException("product not found"));
 		return product;
 	}
 	
+	/**
+	 * Returns all products.
+	 * 
+	 * @return all products
+	 * */
 	public List<Product> findAll() {
 		return repository.findAll();
 	}

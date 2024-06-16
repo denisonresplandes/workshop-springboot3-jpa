@@ -3,7 +3,6 @@ package com.educandoweb.course.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,13 +25,7 @@ public class CategoryResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Integer id) {
-		try {
-			return ResponseEntity.ok(service.findById(id));
-		}
-		catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		}
+	public ResponseEntity<Category> findById(@PathVariable Integer id) {
+		return ResponseEntity.ok(service.findById(id));
 	}
 }

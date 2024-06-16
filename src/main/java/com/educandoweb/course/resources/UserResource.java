@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,27 +30,22 @@ public class UserResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findById(@PathVariable Integer id) {
-		try {
-			return ResponseEntity.ok(service.findById(id));
-		}
-		catch(RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(e.getMessage());
-		}
+	public ResponseEntity<User> findById(@PathVariable Integer id) {
+		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody User user) {
-		try {
-			user = service.insert(user);
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}")
-					.buildAndExpand(user.getId()).toUri();
-			return ResponseEntity.created(uri).body(user);
-		}
-		catch(RuntimeException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	public ResponseEntity<User> insert(@RequestBody User user) {
+		user = service.insert(user);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(user.getId()).toUri();
+		return ResponseEntity.created(uri).body(user);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
