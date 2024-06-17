@@ -1,13 +1,17 @@
 package com.educandoweb.course.services;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
 import com.educandoweb.course.services.exception.NotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -59,5 +63,29 @@ public class UserService {
 	 * */
 	public List<User> findAll() {
 		return repository.findAll();
+	}
+	
+	/**
+	 * Update the {@link User} with the given id.
+	 * 
+	 * @param id
+	 * @param user
+	 * */
+	public User update(Integer id, User user) {
+		try {
+			User entity = repository.getReferenceById(id);
+			Objects.requireNonNull(user, "user can't be null");
+			updateData(entity, user);
+			return repository.save(entity);
+		}
+		catch(JpaObjectRetrievalFailureException | EntityNotFoundException e) {
+			throw new NotFoundException("user not found");
+		}
+	}
+
+	private void updateData(User entity, User user) {
+		entity.setName(user.getName());
+		entity.setEmail(user.getEmail());
+		entity.setPhone(user.getPhone());
 	}
 }

@@ -23,14 +23,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(value = { IllegalArgumentException.class, NullPointerException.class, 
 			BadRequestException.class })
-	public ResponseEntity<ResponseMessage> illegalArgumentException(Exception e) {
+	public ResponseEntity<ResponseMessage> illegalArgumentHandler(Exception e) {
 		ResponseMessage userMessage = new ResponseMessage(HttpStatus.BAD_REQUEST, 
 				e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userMessage);
 	}
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ResponseMessage> dataIntegrityViolationException(DataIntegrityViolationException e) {
+	public ResponseEntity<ResponseMessage> dataIntegrityViolationHandler(DataIntegrityViolationException e) {
 		ResponseMessage userMessage = new ResponseMessage(HttpStatus.BAD_REQUEST, 
 				"Referential integrity constraint violation");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userMessage);

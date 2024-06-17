@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -16,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
+@DynamicUpdate
 @Table(name = "tb_user")
 public final class User implements Serializable {
 
@@ -56,6 +59,14 @@ public final class User implements Serializable {
 
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		Objects.requireNonNull(name);
+		if (name.isEmpty() || name.isBlank()) {
+			throw new IllegalArgumentException("name can't be empty or blank");
+		}
+		this.name = name;
 	}
 
 	public String getEmail() {
