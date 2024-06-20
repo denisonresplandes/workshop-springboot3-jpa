@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
-import com.educandoweb.course.services.exception.NotFoundException;
+import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
@@ -31,14 +31,14 @@ public class ProductService {
 	 * 
 	 * @param id
 	 * @return the product with the given id
-	 * @throws NotFoundException if the {@link Product} not found
+	 * @throws ResourceNotFoundException if the {@link Product} not found
 	 * */
 	public Product findById(Integer id) {
 		if (Objects.isNull(id)) {
 			throw new IllegalArgumentException("the given id must not be null");
 		}
 		Product product = repository.findById(id)
-			.orElseThrow(() -> new NotFoundException("product not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("product not found"));
 		return product;
 	}
 	

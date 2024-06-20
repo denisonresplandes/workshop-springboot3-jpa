@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
-import com.educandoweb.course.services.exception.NotFoundException;
+import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -33,13 +33,13 @@ public class UserService {
 	 * Deletes the {@link User} with the given id.
 	 * 
 	 * @param id
-	 * @throws NotFoundException if the {@link User} not found
+	 * @throws ResourceNotFoundException if the {@link User} not found
 	 * */
 	public void delete(Integer id) {
 		repository.findById(id).ifPresentOrElse(user -> {
 			repository.delete(user);
 		}, () -> { 
-			throw new NotFoundException("user not found");
+			throw new ResourceNotFoundException("user not found");
 		});
 	}
 	
@@ -48,11 +48,11 @@ public class UserService {
 	 * 
 	 * @param id
 	 * @return the user with the given id
-	 * @throws NotFoundException if the {@link User} not found
+	 * @throws ResourceNotFoundException if the {@link User} not found
 	 * */
 	public User findById(Integer id) {
 		User user = repository.findById(id)
-			.orElseThrow(() -> new NotFoundException("user not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("user not found. Id: " + id));
 		return user;
 	}
 	
@@ -79,7 +79,7 @@ public class UserService {
 			return repository.save(entity);
 		}
 		catch(JpaObjectRetrievalFailureException | EntityNotFoundException e) {
-			throw new NotFoundException("user not found");
+			throw new ResourceNotFoundException("user not found");
 		}
 	}
 
