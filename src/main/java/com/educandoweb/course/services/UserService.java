@@ -91,8 +91,13 @@ public class UserService {
 	}
 
 	private void updateData(User entity, User user) {
-		entity.setName(user.getName());
-		entity.setEmail(user.getEmail());
-		entity.setPhone(user.getPhone());
+		try {
+			entity.setName(user.getName());
+			entity.setEmail(user.getEmail());
+			entity.setPhone(user.getPhone());
+		}
+		catch (NullPointerException e) {
+			throw new IllegalArgumentException("user with one or more null attributes");
+		}
 	}
 }
