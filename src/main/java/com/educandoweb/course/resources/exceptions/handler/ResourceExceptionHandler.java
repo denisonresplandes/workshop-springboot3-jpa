@@ -3,7 +3,6 @@ package com.educandoweb.course.resources.exceptions.handler;
 import java.time.Instant;
 
 import org.apache.coyote.BadRequestException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.educandoweb.course.resources.exceptions.handler.messages.StandardErrorMessage;
+import com.educandoweb.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,11 +35,11 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 	}
 	
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<StandardErrorMessage> dataIntegrityViolationHandler(DataIntegrityViolationException e,
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<StandardErrorMessage> databaseExceptionHandler(DatabaseException e,
 			HttpServletRequest request) {
 		StandardErrorMessage errorMessage = createStandardErrorMessage(
-				"Referential integrity constraint violation", 
+				"Database error. Referential integrity constraint violation", 
 				request, HttpStatus.BAD_REQUEST);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 	}

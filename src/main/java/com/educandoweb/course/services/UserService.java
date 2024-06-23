@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
+import com.educandoweb.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -37,7 +39,12 @@ public class UserService {
 	 * */
 	public void delete(Integer id) {
 		repository.findById(id).ifPresentOrElse(user -> {
-			repository.delete(user);
+			try {
+				repository.delete(user);
+			}
+			catch (DataIntegrityViolationException e) {
+				throw new DatabaseException(e.getMessage());
+			}
 		}, () -> { 
 			throw new ResourceNotFoundException("user not found");
 		});
