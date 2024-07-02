@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserResource {
@@ -36,7 +38,7 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User user) {
+	public ResponseEntity<User> insert(@Valid @RequestBody User user) {
 		user = service.insert(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}")

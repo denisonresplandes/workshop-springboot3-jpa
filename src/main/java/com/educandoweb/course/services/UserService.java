@@ -56,8 +56,12 @@ public class UserService {
 	 * @param id
 	 * @return the user with the given id
 	 * @throws ResourceNotFoundException if the {@link User} not found
+	 * @throws IllegalArgumentException if the id is null
 	 * */
 	public User findById(Integer id) {
+		if (Objects.isNull(id)) {
+			throw new IllegalArgumentException("the given id must not be null");
+		}
 		User user = repository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("user not found. Id: " + id));
 		return user;

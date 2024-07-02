@@ -27,18 +27,19 @@ public class ProductService {
 	}
 	
 	/**
-	 * Retrieves an {@link Product} by its id.
+	 * Retrieves a {@link Product} by its id.
 	 * 
 	 * @param id
 	 * @return the product with the given id
 	 * @throws ResourceNotFoundException if the {@link Product} not found
+	 * @throws IllegalArgumentException if the id is null
 	 * */
 	public Product findById(Integer id) {
 		if (Objects.isNull(id)) {
 			throw new IllegalArgumentException("the given id must not be null");
 		}
 		Product product = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("product not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("product not found. Id: " + id));
 		return product;
 	}
 	

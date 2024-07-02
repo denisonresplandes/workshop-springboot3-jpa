@@ -1,6 +1,7 @@
 package com.educandoweb.course.services;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,19 @@ public class CategoryService {
 	}
 	
 	/**
-	 * Retrieves an {@link Category} by its id.
+	 * Retrieves a {@link Category} by its id.
 	 * 
 	 * @param id
 	 * @return the category with the given id
 	 * @throws ResourceNotFoundException if the {@link Category} not found
+	 * @throws IllegalArgumentException if the id is null
 	 * */
 	public Category findById(Integer id) {
+		if (Objects.isNull(id)) {
+			throw new IllegalArgumentException("the given id must not be null");
+		}
 		Category category = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("category not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("category not found. Id: " + id));
 		return category;
 	}
 	

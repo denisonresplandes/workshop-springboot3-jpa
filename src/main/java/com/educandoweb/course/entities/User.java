@@ -10,12 +10,16 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @DynamicUpdate
@@ -27,11 +31,19 @@ public final class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@NotBlank(message = "{notBlank.message}")
+	@Size(min = 2, message = "{size.message}")
 	private String name;
+	
+	@Email(message = "{email.message}")
+	@NotBlank(message = "{notBlank.message}")
 	private String email;
+	
+	@Column(length = 100)
 	private String phone;
 	
-	@SuppressWarnings("unused")
+	@NotBlank(message = "notBlank.message")
 	private String password;
 	
 	@JsonIgnore
@@ -45,7 +57,6 @@ public final class User implements Serializable {
 	protected User() { }
 	
 	public User(String name, String email, String phone, String password) {
-		// TODO bean validation
 		validateAttribs(name, email, phone, password);
 		this.name = name;
 		this.email = email;
